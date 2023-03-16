@@ -1,29 +1,27 @@
 import {useEffect, useState} from 'react'
-
+import axios from "axios";
 import './App.css'
 
 function App() {
-    const [tags, setTags] = useState<any[]>([])
+    //1. tags = []
+    //6. tags = [{},{},{},{}]
+    const [todolists, setTodolists] = useState<any[]>([])
 
     //2. register effect
     useEffect(() => {
         //4.run effect
-        setTimeout(() => {
-            //5. change observable state
-            setTags([{id: 1, title: "HTML"},
-                {id: 2, title: "CSS"},
-                {id: 3, title: "JS"},
-                {id: 4, title: "React"}]
-            )
-        }, 2000)
-    }, [])
+        axios.get('https://todolists.samuraijs.com/api/1.0/todolists?pageNumber=1&pageSize=10').then(response => {
+            console.log(response.data)
+            setTodolists(response.data.items)
+        })
+        }, [])
     //3.empty rendering
     //7.tags rendering
     return (
         <div>
             <ul>
                 {
-                    tags.map((t: any) => {
+                    todolists.map((t: any) => {
                             return <div key={t.id.toString()}>{t.title}</div>
                         }
                     )
